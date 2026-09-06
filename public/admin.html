@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="/css/admin.css"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-brand">🛡️ Ama<span>nah</span></div>
+  <div class="sb-role">Admin Panel</div>
+  <nav class="sb-nav">
+    <a href="#" class="sb-link active" data-tab="overview">📊 Overview</a>
+    <a href="#" class="sb-link" data-tab="trigger">🚨 Trigger Alert</a>
+    <a href="#" class="sb-link" data-tab="alerts">📋 Manage Alerts</a>
+    <a href="#" class="sb-link" data-tab="users">👥 Users</a>
+    <a href="#" class="sb-link" data-tab="resources">🏥 Resources</a>
+    <a href="#" class="sb-link" data-tab="reports">📝 Reports</a>
+    <a href="#" class="sb-link" data-tab="map">🗺️ Live Map</a>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-online"><span class="pulse-dot"></span><span id="sbOnline">0</span> users online</div>
+    <button onclick="adminLogout()" class="sb-logout">Logout</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="admin-main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="tabTitle">Overview</div>
+    <div class="topbar-right">
+      <div class="topbar-time" id="topbarTime"></div>
+      <div class="topbar-admin">👤 <span id="adminName">Admin</span></div>
+    </div>
+  </div>
+
+  <!-- LOGIN OVERLAY -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo">🛡️ Amanah</div>
+      <h2>Admin Login</h2>
+      <div class="form-group"><label>Email</label><input type="email" id="adminEmail" placeholder="admin@amanah.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••"/></div>
+      <button onclick="adminLogin()" class="btn-primary full">Login</button>
+      <div id="loginError" class="error-msg" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="stats-grid">
+      <div class="stat-card red"><div class="sc-icon">🚨</div><div class="sc-num" id="sc-active">0</div><div class="sc-label">Active Alerts</div></div>
+      <div class="stat-card orange"><div class="sc-icon">📋</div><div class="sc-num" id="sc-total">0</div><div class="sc-label">Total Alerts</div></div>
+      <div class="stat-card green"><div class="sc-icon">✅</div><div class="sc-num" id="sc-resolved">0</div><div class="sc-label">Resolved</div></div>
+      <div class="stat-card blue"><div class="sc-icon">👥</div><div class="sc-num" id="sc-users">0</div><div class="sc-label">Registered Users</div></div>
+    </div>
+    <div class="overview-grid">
+      <div class="ov-card">
+        <h3>Recent Alerts</h3>
+        <div id="recentAlerts" class="recent-list">Loading...</div>
+      </div>
+      <div class="ov-card">
+        <h3>Alerts by Severity</h3>
+        <div id="severityChart" class="severity-bars"></div>
+      </div>
+      <div class="ov-card">
+        <h3>Alerts by Type</h3>
+        <div id="typeChart" class="type-list"></div>
+      </div>
+      <div class="ov-card">
+        <h3>Pending Reports</h3>
+        <div id="pendingReports" class="recent-list">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: TRIGGER ALERT -->
+  <div class="tab-content" id="tab-trigger">
+    <div class="trigger-layout">
+      <div class="trigger-form-card">
+        <h3>🚨 Trigger New Alert</h3>
+        <div class="form-group"><label>Alert Title *</label><input type="text" id="aTitle" placeholder="e.g. Severe Flood Warning — Bengaluru"/></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Disaster Type *</label>
+            <select id="aType">
+              <option value="">Select type</option>
+              <option value="flood">🌊 Flood</option>
+              <option value="earthquake">🌍 Earthquake</option>
+              <option value="cyclone">🌀 Cyclone</option>
+              <option value="fire">🔥 Fire</option>
+              <option value="tsunami">🌊 Tsunami</option>
+              <option value="landslide">⛰️ Landslide</option>
+              <option value="drought">☀️ Drought</option>
+              <option value="epidemic">🦠 Epidemic</option>
+              <option value="industrial">🏭 Industrial</option>
+              <option value="terrorist">💣 Terrorist</option>
+              <option value="nuclear">☢️ Nuclear</option>
+              <option value="chemical">🧪 Chemical</option>
+              <option value="other">⚠️ Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Severity *</label>
+            <select id="aSeverity">
+              <option value="">Select severity</option>
+              <option value="low">🟡 Low</option>
+              <option value="medium">🟠 Medium</option>
+              <option value="high">🔴 High</option>
+              <option value="critical">🚨 Critical</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Description *</label><textarea id="aDesc" rows="3" placeholder="Describe the disaster situation in detail..."></textarea></div>
+
+        <div class="form-group">
+          <label>Affected Areas <small>(Click map to pin OR add manually)</small></label>
+          <div id="areasContainer"></div>
+          <button type="button" onclick="addManualAreaRow()" class="btn-add">+ Add Area Manually</button>
+        </div>
+
+        <div class="form-group">
+          <label>Safety Instructions <small>(one per line)</small></label>
+          <textarea id="aInstructions" rows="4" placeholder="Evacuate immediately to higher ground&#10;Do not use elevators&#10;Keep emergency kit ready&#10;Follow official announcements"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Emergency Helpline Numbers <small>(comma separated)</small></label>
+          <input type="text" id="aHelplines" placeholder="112, 101, 1078"/>
+        </div>
+
+        <button onclick="triggerAlert()" class="btn-danger full" id="triggerBtn">🚨 TRIGGER ALERT & NOTIFY USERS</button>
+        <div id="triggerResult" class="trigger-result" style="display:none"></div>
+      </div>
+
+      <div class="trigger-map-card">
+        <h3>📍 Click Map to Pin Areas</h3>
+        <p class="map-hint">🖱️ Click anywhere on the map to drop a pin. Drag pins to adjust. Each pin auto-fills the lat/lng in the form. You can also type lat/lng manually.</p>
+        <div id="triggerMap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MANAGE ALERTS -->
+  <div class="tab-content" id="tab-alerts">
+    <div class="tab-toolbar">
+      <h3>All Alerts</h3>
+      <div class="toolbar-actions">
+        <select id="statusFilter" onchange="loadAllAlerts()">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="monitoring">Monitoring</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <button onclick="loadAllAlerts()" class="btn-sm">Refresh</button>
+      </div>
+    </div>
+    <div id="allAlertsList" class="admin-list">Loading...</div>
+  </div>
+
+  <!-- TAB: USERS -->
+  <div class="tab-content" id="tab-users">
+    <div class="tab-toolbar">
+      <h3>Registered Users</h3>
+      <input type="text" id="userSearch" placeholder="Search by name, email or city..." oninput="filterUsers()" class="search-input-sm"/>
+    </div>
+    <div id="usersList" class="admin-table-wrap">Loading...</div>
+  </div>
+
+  <!-- TAB: RESOURCES -->
+  <div class="tab-content" id="tab-resources">
+    <div class="tab-toolbar">
+      <h3>Emergency Resources</h3>
+      <button onclick="showAddResource()" class="btn-primary">+ Add Resource</button>
+    </div>
+    <div id="addResourceForm" class="inline-form" style="display:none">
+      <div class="form-row">
+        <div class="form-group"><label>Name</label><input type="text" id="rName"/></div>
+        <div class="form-group"><label>Type</label>
+          <select id="rType"><option value="hospital">Hospital</option><option value="shelter">Shelter</option><option value="food">Food</option><option value="rescue">Rescue</option><option value="police">Police</option><option value="fire_station">Fire Station</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Address</label><input type="text" id="rAddress"/></div>
+        <div class="form-group"><label>City</label><input type="text" id="rCity"/></div>
+        <div class="form-group"><label>State</label><input type="text" id="rState"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input type="text" id="rPhone"/></div>
+        <div class="form-group"><label>Capacity</label><input type="number" id="rCapacity"/></div>
+        <div class="form-group"><label>Latitude</label><input type="number" id="rLat" step="any"/></div>
+        <div class="form-group"><label>Longitude</label><input type="number" id="rLng" step="any"/></div>
+      </div>
+      <button onclick="addResource()" class="btn-primary">Save Resource</button>
+      <button onclick="document.getElementById('addResourceForm').style.display='none'" class="btn-ghost-sm">Cancel</button>
+    </div>
+    <div id="resourcesList2" class="admin-list">Loading...</div>
+  </div>
+
+  <!-- TAB: REPORTS -->
+  <div class="tab-content" id="tab-reports">
+    <div class="tab-toolbar"><h3>Citizen Incident Reports</h3><button onclick="loadReports()" class="btn-sm">Refresh</button></div>
+    <div id="reportsList" class="admin-list">Loading...</div>
+  </div>
+
+  <!-- TAB: LIVE MAP -->
+  <div class="tab-content" id="tab-map">
+    <div id="adminLiveMap" style="height:calc(100vh - 120px);border-radius:16px;overflow:hidden"></div>
+  </div>
+
+</div><!-- end admin-main -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

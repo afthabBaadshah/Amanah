@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — Disaster Management & Alert System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo-nav">🛡️ Ama<span>nah</span></a>
+    <ul class="nav-links">
+      <li><a href="/map">Live Map</a></li>
+      <li><a href="#alerts">Active Alerts</a></li>
+      <li><a href="#resources">Resources</a></li>
+      <li><a href="#report">Report Incident</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="online-badge"><span class="pulse-dot"></span><span id="onlineCount">0</span> online</div>
+      <div id="navAuth">
+        <a href="/login" class="btn-ghost-sm">Login</a>
+        <a href="/register" class="btn-primary-sm">Register</a>
+      </div>
+      <div id="navUser" style="display:none">
+        <a href="/dashboard" class="btn-primary-sm">Dashboard</a>
+        <button onclick="logout()" class="btn-ghost-sm">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge reveal"><span class="pulse-dot red"></span> Real-Time Disaster Monitoring Active</div>
+    <h1 class="hero-title reveal">When Disaster Strikes,<br/><em>Amanah</em> Protects.</h1>
+    <p class="hero-desc reveal">AI-powered disaster management platform delivering instant multi-channel alerts — browser, SMS & email — with live maps, resource tracking and citizen reporting.</p>
+    <div class="hero-actions reveal">
+      <a href="/register" class="btn-primary">Register for Alerts</a>
+      <a href="/map" class="btn-ghost">View Live Map →</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hstat"><span class="hnum" id="statAlerts">0</span><span class="hlabel">Active Alerts</span></div>
+      <div class="hdiv"></div>
+      <div class="hstat"><span class="hnum" id="statUsers">0</span><span class="hlabel">Registered Users</span></div>
+      <div class="hdiv"></div>
+      <div class="hstat"><span class="hnum" id="statResolved">0</span><span class="hlabel">Resolved</span></div>
+    </div>
+  </div>
+  <div class="hero-map-preview reveal">
+    <div id="heroMap"></div>
+    <div class="map-overlay-badge">🔴 Live Feed</div>
+  </div>
+</section>
+
+<!-- LIVE ALERTS TICKER -->
+<div class="ticker-bar" id="tickerBar">
+  <div class="ticker-label">🚨 LIVE ALERTS</div>
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">No active alerts — Stay prepared</span>
+  </div>
+</div>
+
+<!-- ACTIVE ALERTS -->
+<section class="section" id="alerts">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag reveal">Live Situation</div>
+      <h2 class="section-title reveal">Active <em>Alerts</em></h2>
+      <p class="section-sub reveal">Real-time disaster alerts across India. Updated instantly as situations develop.</p>
+    </div>
+    <div class="alerts-filter reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="critical">🚨 Critical</button>
+      <button class="filter-btn" data-filter="high">🔴 High</button>
+      <button class="filter-btn" data-filter="medium">🟠 Medium</button>
+      <button class="filter-btn" data-filter="low">🟡 Low</button>
+    </div>
+    <div class="alerts-grid" id="alertsGrid">
+      <div class="loading-state">Loading alerts...</div>
+    </div>
+  </div>
+</section>
+
+<!-- DISASTER TYPES -->
+<section class="section dark-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag light reveal">Coverage</div>
+      <h2 class="section-title white reveal">All Disaster <em>Types</em> Covered</h2>
+    </div>
+    <div class="disaster-types-grid">
+      <div class="dtype reveal" data-delay="0">🌊<span>Flood</span></div>
+      <div class="dtype reveal" data-delay="50">🌍<span>Earthquake</span></div>
+      <div class="dtype reveal" data-delay="100">🌀<span>Cyclone</span></div>
+      <div class="dtype reveal" data-delay="150">🔥<span>Fire</span></div>
+      <div class="dtype reveal" data-delay="200">🌊<span>Tsunami</span></div>
+      <div class="dtype reveal" data-delay="250">⛰️<span>Landslide</span></div>
+      <div class="dtype reveal" data-delay="300">☀️<span>Drought</span></div>
+      <div class="dtype reveal" data-delay="350">🦠<span>Epidemic</span></div>
+      <div class="dtype reveal" data-delay="400">🏭<span>Industrial</span></div>
+      <div class="dtype reveal" data-delay="450">💣<span>Terrorist</span></div>
+      <div class="dtype reveal" data-delay="500">☢️<span>Nuclear</span></div>
+      <div class="dtype reveal" data-delay="550">🧪<span>Chemical</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag reveal">Emergency Resources</div>
+      <h2 class="section-title reveal">Find Help <em>Near You</em></h2>
+    </div>
+    <div class="resources-search reveal">
+      <input type="text" id="resCity" placeholder="Enter your city..." class="search-input"/>
+      <select id="resType" class="search-select">
+        <option value="">All Types</option>
+        <option value="hospital">🏥 Hospital</option>
+        <option value="shelter">🏠 Shelter</option>
+        <option value="food">🍱 Food</option>
+        <option value="rescue">🚁 Rescue</option>
+        <option value="police">👮 Police</option>
+        <option value="fire_station">🚒 Fire Station</option>
+      </select>
+      <button onclick="searchResources()" class="btn-primary">Search</button>
+    </div>
+    <div id="resourceMap" class="resource-map"></div>
+    <div class="resources-list" id="resourcesList"></div>
+  </div>
+</section>
+
+<!-- REPORT INCIDENT -->
+<section class="section dark-section" id="report">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag light reveal">Citizen Reporting</div>
+      <h2 class="section-title white reveal">Report an <em>Incident</em></h2>
+      <p class="section-sub light reveal">See something dangerous? Report it and help authorities respond faster.</p>
+    </div>
+    <div class="report-form reveal" id="reportFormWrap">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Incident Title</label>
+          <input type="text" id="repTitle" placeholder="e.g. Road flooded near main bazaar"/>
+        </div>
+        <div class="form-group">
+          <label>Disaster Type</label>
+          <select id="repType" class="report-select">
+            <option value="" style="background:#1e2d4a;color:#fff">Select type</option>
+            <option value="flood" style="background:#1e2d4a;color:#fff">🌊 Flood</option>
+            <option value="earthquake" style="background:#1e2d4a;color:#fff">🌍 Earthquake</option>
+            <option value="fire" style="background:#1e2d4a;color:#fff">🔥 Fire</option>
+            <option value="cyclone" style="background:#1e2d4a;color:#fff">🌀 Cyclone</option>
+            <option value="tsunami" style="background:#1e2d4a;color:#fff">🌊 Tsunami</option>
+            <option value="landslide" style="background:#1e2d4a;color:#fff">⛰️ Landslide</option>
+            <option value="drought" style="background:#1e2d4a;color:#fff">☀️ Drought</option>
+            <option value="epidemic" style="background:#1e2d4a;color:#fff">🦠 Epidemic</option>
+            <option value="industrial" style="background:#1e2d4a;color:#fff">🏭 Industrial</option>
+            <option value="terrorist" style="background:#1e2d4a;color:#fff">💣 Terrorist</option>
+            <option value="nuclear" style="background:#1e2d4a;color:#fff">☢️ Nuclear</option>
+            <option value="chemical" style="background:#1e2d4a;color:#fff">🧪 Chemical</option>
+            <option value="other" style="background:#1e2d4a;color:#fff">⚠️ Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="repCity" placeholder="Your city"/>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" id="repState" placeholder="Your state"/>
+        </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea id="repDesc" rows="3" placeholder="Describe what you see..."></textarea>
+        </div>
+      </div>
+      <button onclick="submitReport()" class="btn-primary" id="repBtn">Submit Report</button>
+      <div id="repSuccess" class="form-success" style="display:none">✅ Report submitted! Authorities have been notified.</div>
+      <p class="report-note">⚠️ You must be <a href="/login">logged in</a> to submit a report.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag reveal">How It Works</div>
+      <h2 class="section-title reveal">From Detection to <em>Safety</em></h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal" data-delay="0"><div class="step-num">01</div><div class="step-icon">🔍</div><h3>Detect</h3><p>Authorities detect or predict a disaster using sensor data, weather APIs, and citizen reports.</p></div>
+      <div class="step reveal" data-delay="100"><div class="step-num">02</div><div class="step-icon">🚨</div><h3>Alert</h3><p>Admin triggers an alert on Amanah — specifying areas, severity level, and safety instructions.</p></div>
+      <div class="step reveal" data-delay="200"><div class="step-num">03</div><div class="step-icon">📡</div><h3>Notify</h3><p>Instant multi-channel notifications — browser push, SMS and email — reach all registered users in affected areas.</p></div>
+      <div class="step reveal" data-delay="300"><div class="step-num">04</div><div class="step-icon">🗺️</div><h3>Respond</h3><p>Live map shows disaster zones, nearest hospitals, shelters, and rescue centres for quick response.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- EMERGENCY NUMBERS -->
+<section class="section dark-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag light reveal">Emergency</div>
+      <h2 class="section-title white reveal">National Helpline <em>Numbers</em></h2>
+    </div>
+    <div class="helplines-grid">
+      <div class="helpline reveal"><div class="hl-num">112</div><div class="hl-label">National Emergency</div></div>
+      <div class="helpline reveal" data-delay="50"><div class="hl-num">101</div><div class="hl-label">Fire</div></div>
+      <div class="helpline reveal" data-delay="100"><div class="hl-num">102</div><div class="hl-label">Ambulance</div></div>
+      <div class="helpline reveal" data-delay="150"><div class="hl-num">100</div><div class="hl-label">Police</div></div>
+      <div class="helpline reveal" data-delay="200"><div class="hl-num">1078</div><div class="hl-label">Disaster Relief</div></div>
+      <div class="helpline reveal" data-delay="250"><div class="hl-num">1070</div><div class="hl-label">NDRF Control Room</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div id="alertToast" class="alert-toast" style="display:none">
+  <div class="toast-icon" id="toastIcon">🚨</div>
+  <div class="toast-body">
+    <div class="toast-title" id="toastTitle"></div>
+    <div class="toast-desc" id="toastDesc"></div>
+  </div>
+  <button onclick="closeToast()" class="toast-close">✕</button>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:14px">🛡️ Ama<span style="color:var(--orange)">nah</span></div>
+        <p>Real-time disaster management & alert system for a safer India.</p>
+      </div>
+      <div class="footer-links">
+        <div class="fcol"><h4>Platform</h4><a href="/map">Live Map</a><a href="/dashboard">Dashboard</a><a href="/admin">Admin</a></div>
+        <div class="fcol"><h4>Emergency</h4><a href="tel:112">112 - National</a><a href="tel:101">101 - Fire</a><a href="tel:1078">1078 - Relief</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Amanah. Built for Vishwakarma Hackathon.</p></div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

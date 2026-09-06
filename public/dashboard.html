@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo">🛡️ Ama<span>nah</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/map">Live Map</a></li>
+    </ul>
+    <div class="nav-right">
+      <button onclick="logout()" class="btn-ghost-sm">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-wrap">
+  <div class="dash-header">
+    <div>
+      <h1>My Dashboard</h1>
+      <p id="dashWelcome" style="color:var(--muted)">Loading...</p>
+    </div>
+    <div class="push-toggle">
+      <button onclick="enablePush()" id="pushBtn" class="btn-primary-sm">🔔 Enable Push Alerts</button>
+    </div>
+  </div>
+
+  <div class="dash-stats">
+    <div class="ds-card orange"><div class="ds-icon">🚨</div><div class="ds-num" id="ds-active">0</div><div class="ds-label">Active Alerts in Your Area</div></div>
+    <div class="ds-card blue"><div class="ds-icon">👁️</div><div class="ds-num" id="ds-total">0</div><div class="ds-label">Total Alerts Received</div></div>
+    <div class="ds-card green"><div class="ds-icon">📍</div><div class="ds-txt" id="ds-location">—</div><div class="ds-label">Your Location</div></div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-card">
+      <h3>⚠️ Alerts in Your Area</h3>
+      <div id="myAlerts" class="dash-list">Loading...</div>
+    </div>
+    <div class="dash-card">
+      <h3>🏥 Nearest Resources</h3>
+      <div id="nearbyResources" class="dash-list">Loading...</div>
+    </div>
+    <div class="dash-card full">
+      <h3>📝 My Incident Reports</h3>
+      <div id="myReports" class="dash-list">No reports submitted yet.</div>
+      <button onclick="window.location='/#report'" class="btn-primary-sm" style="margin-top:12px">+ Submit New Report</button>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

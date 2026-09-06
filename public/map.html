@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — Live Disaster Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<style>
+body{margin:0;overflow:hidden}
+#fullMap{position:fixed;inset:0;z-index:1}
+.map-topbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(15,20,40,0.92);backdrop-filter:blur(16px);padding:14px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.map-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#fff;text-decoration:none}
+.map-logo span{color:var(--orange)}
+.map-filters{display:flex;gap:8px;flex-wrap:wrap}
+.mf-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;font-size:12px;cursor:pointer;transition:all .2s}
+.mf-btn.active,.mf-btn:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+.map-back{margin-left:auto;color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px}
+.map-legend{position:fixed;bottom:24px;left:24px;z-index:1000;background:rgba(15,20,40,0.92);backdrop-filter:blur(16px);border-radius:16px;padding:20px;min-width:200px}
+.map-legend h4{color:#fff;font-family:'Syne',sans-serif;font-size:14px;margin-bottom:14px}
+.leg-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:rgba(255,255,255,0.7)}
+.leg-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.map-info{position:fixed;bottom:24px;right:24px;z-index:1000;background:rgba(15,20,40,0.92);backdrop-filter:blur(16px);border-radius:16px;padding:20px;min-width:240px;max-width:300px;max-height:60vh;overflow-y:auto}
+.map-info h4{color:#fff;font-family:'Syne',sans-serif;font-size:14px;margin-bottom:14px}
+.mi-item{background:rgba(255,255,255,0.07);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer}
+.mi-title{color:#fff;font-size:13px;font-weight:600}
+.mi-sub{color:rgba(255,255,255,0.5);font-size:11px;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="map-topbar">
+  <a href="/" class="map-logo">🛡️ Ama<span>nah</span></a>
+<div class="map-filters">
+  <button class="mf-btn active" id="btn-alerts" onclick="toggleLayer('alerts', this)">🚨 Alerts</button>
+  <button class="mf-btn active" id="btn-resources" onclick="toggleLayer('resources', this)">🏥 Resources</button>
+  <button class="mf-btn active" id="btn-reports" onclick="toggleLayer('reports', this)">📝 Reports</button>
+</div>
+  <a href="/" class="map-back">← Back to Home</a>
+</div>
+
+<div id="fullMap"></div>
+
+<div class="map-legend">
+  <h4>Legend</h4>
+  <div class="leg-item"><div class="leg-dot" style="background:#7c3aed"></div>Critical Alert</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div>High Alert</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#f97316"></div>Medium Alert</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>Low Alert</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div>Hospital / Resource</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>Citizen Report</div>
+</div>
+
+<div class="map-info">
+  <h4>Active Situations</h4>
+  <div id="mapSidebar">Loading...</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/map.js"></script>
+</body>
+</html>

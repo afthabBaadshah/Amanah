@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body class="auth-body">
+<div class="auth-bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div class="auth-card">
+  <a href="/" class="logo" style="display:block;text-align:center;margin-bottom:8px;font-size:28px">🛡️ Ama<span>nah</span></a>
+  <h2 style="text-align:center;margin-bottom:4px">Welcome Back</h2>
+  <p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px">Login to access your alert dashboard</p>
+  <div class="form-group"><label>Email</label><input type="email" id="lEmail" placeholder="your@email.com"/></div>
+  <div class="form-group"><label>Password</label><input type="password" id="lPassword" placeholder="••••••••"/></div>
+  <button onclick="loginUser()" class="btn-primary full" id="loginBtn">Login</button>
+  <div id="loginError" class="error-msg" style="display:none"></div>
+  <p style="text-align:center;margin-top:20px;font-size:14px;color:var(--muted)">New here? <a href="/register" style="color:var(--orange)">Register</a></p>
+</div>
+<script src="/js/auth.js"></script>
+</body>
+</html>

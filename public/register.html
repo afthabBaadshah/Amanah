@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Amanah — Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body class="auth-body">
+<div class="auth-bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+<div class="auth-card">
+  <a href="/" class="logo" style="display:block;text-align:center;margin-bottom:8px;font-size:28px">🛡️ Ama<span>nah</span></a>
+  <h2 style="text-align:center;margin-bottom:4px">Create Account</h2>
+  <p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px">Register to receive disaster alerts in your area</p>
+  <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Your full name"/></div>
+  <div class="form-row">
+    <div class="form-group"><label>Email</label><input type="email" id="rEmail" placeholder="your@email.com"/></div>
+    <div class="form-group"><label>Phone (for SMS)</label><input type="tel" id="rPhone" placeholder="9876543210"/></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>City</label><input type="text" id="rCity" placeholder="Bengaluru"/></div>
+    <div class="form-group"><label>State</label><input type="text" id="rState" placeholder="Karnataka"/></div>
+  </div>
+  <div class="form-group"><label>Password</label><input type="password" id="rPassword" placeholder="Min 6 characters"/></div>
+  <button onclick="registerUser()" class="btn-primary full" id="regBtn">Register & Enable Alerts</button>
+  <div id="regError" class="error-msg" style="display:none"></div>
+  <p style="text-align:center;margin-top:20px;font-size:14px;color:var(--muted)">Already registered? <a href="/login" style="color:var(--orange)">Login</a></p>
+</div>
+<script src="/js/auth.js"></script>
+</body>
+</html>
