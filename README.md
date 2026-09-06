@@ -1,9 +1,9 @@
-# 🛡️ Amanah — Disaster Management & Alert System
+#  Amanah — Disaster Management & Alert System
 ### Built for Vishwakarma Hackathon 2026 | Cambridge Institute of Technology
 
 ---
 
-## 🚀 Quick Setup (Step by Step)
+##  Quick Setup (Step by Step)
 
 ### Step 1 — Install Prerequisites
 - Node.js: https://nodejs.org (LTS version)
